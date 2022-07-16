@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import useCarrito from '../hooks/useCarrito';
-import { config } from '../../config/config.js';
+import { config } from '../config/config.js';
 
 const BACKEND_SERVER = config.BACKEND_SERVER
 
