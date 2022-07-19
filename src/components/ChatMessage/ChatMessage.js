@@ -1,9 +1,6 @@
-import { Link } from 'react-router-dom'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
-import Accordion from 'react-bootstrap/Accordion'
-import Button from 'react-bootstrap/Button';
 
 const ChatMessage = ({ message }) => {
 

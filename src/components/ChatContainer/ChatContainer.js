@@ -5,86 +5,65 @@ import { useParams } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import ChatMessagesList from '../ChatMessageList/ChatMessagesList';
 import io from 'socket.io-client';
-import { normalize, denormalize, schema } from "normalizr"
+import { denormalize, schema } from "normalizr"
+import ChatFormContainer from '../ChatFormContainer/ChatFormContainer';
+import { config } from '../../config/config.js';
 
-const socket = io("https://backendproyfinal.herokuapp.com", { transports: ["websocket", "polling"] });
+const BACKEND_SERVER = config.BACKEND_SERVER
+const socket = io(BACKEND_SERVER, { transports: ["websocket", "polling"] });
 
 /**
  * Normalizr Schemas 
  * 
  */
 
- const authorSchema = new schema.Entity('author')
+const authorSchema = new schema.Entity('author')
 
- const messageSchema = new schema.Entity('message', {
-     author: authorSchema
- })
- 
- const messagesSchema = new schema.Entity('messages', {
-     messages: [messageSchema]
- })
+const messageSchema = new schema.Entity('message', {
+  author: authorSchema
+})
+
+const messagesSchema = new schema.Entity('messages', {
+  messages: [messageSchema]
+})
 
 
 
 const ChatContainer = () => {
-    const [isConnected, setIsConnected] = useState(socket.connected);
-    const [lastPong, setLastPong] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [loading, setLoading]  = useState(true);
+  
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    const { email } = useParams();
+  const { email } = useParams();
 
-    useEffect(() => {
-        socket.on('connect', () => {
-          setIsConnected(true);
-        });
-    
-        socket.on('disconnect', () => {
-          setIsConnected(false);
-        });
-    
-        socket.on('pong', () => {
-          setLastPong(new Date().toISOString());
-        });
+  useEffect(() => {
 
-        socket.on('messages', (dataNormalized) => {
+    if (socket && email) socket.emit('join', email);
 
-            let dataDesnormalized = denormalize(dataNormalized.result, messagesSchema, dataNormalized.entities)
-            setMessages(dataDesnormalized.messages)
-            console.log(dataDesnormalized.messages)
-            setLoading(false)
-        });
-    
-        return () => {
-          socket.off('connect');
-          socket.off('disconnect');
-          socket.off('pong');
-          setLoading(true)
-        };
-      }, []);
-    
-      const sendPing = () => {
-        socket.emit('ping');
-      }
-    
-      return (
-        loading ?
-        <Loading/>:
-        <div className='container'>
-          <p>Connected: { '' + isConnected }</p>
-          <p>Last pong: { lastPong || '-' }</p>
-          <button onClick={ sendPing }>Send ping</button>
-          <ChatMessagesList messages={messages}/>
-        </div>
-      );
+    socket.on('chat', (dataNormalized) => {
+      let dataDesnormalized = denormalize(dataNormalized.result, messagesSchema, dataNormalized.entities)
+      setMessages(dataDesnormalized.messages)
+      console.log(dataDesnormalized.messages)
+      setLoading(false)
+    });
 
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('pong');
+      setLoading(true)
+    };
+  }, [email]);
 
-    // return (
+  return (
+    loading ?
+      <Loading /> :
+      <Container className='mb-5 justify-content-center'>
+        <ChatFormContainer socket={socket} email={email}/>
+        <ChatMessagesList messages={messages} />
+      </Container>
+  );
 
-    //         <Container>
-    //             <ChatMessagesList />
-    //         </Container>
-    // )
 }
 
 export default ChatContainer
