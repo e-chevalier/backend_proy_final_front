@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import FloatingLabel from 'react-bootstrap/FloatingLabel'
 
 
-const ChatForm = ({show, validated, setName, setSurname, setAge, setAlias, setAvatar, setMessage, handleShow, handleClose, handleSubmit}) => {
+const ChatForm = ({show, validated, setMessage, handleShow, handleClose, handleSubmit}) => {
 
     return (
         <>
@@ -19,36 +19,6 @@ const ChatForm = ({show, validated, setName, setSurname, setAge, setAlias, setAv
                     </Modal.Header>
 
                     <Modal.Body>
-                        <Form.Group className="mb-3" controlId="formName">
-                            <FloatingLabel label="Nombre" className="mb-3">
-                                <Form.Control required type="text" placeholder="Nombre" onBlur={(e) => { setName(e.target.value) }} />
-                                <Form.Control.Feedback type="invalid">Ingrese un Nombre.</Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formSurname">
-                            <FloatingLabel label="Apellido" className="mb-3">
-                                <Form.Control  type="text" required placeholder="Ingrese su apellido" onBlur={(e) => { setSurname(e.target.value) }} />
-                                <Form.Control.Feedback type="invalid">Ingrese un apellido.</Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formAge">
-                            <FloatingLabel label="Age" className="mb-3">
-                                <Form.Control required type="number" placeholder="Ingrese Edad" onBlur={(e) => { setAge(e.target.value) }} />
-                                <Form.Control.Feedback type="invalid">Ingrese su edad.</Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formAlias">
-                            <FloatingLabel label="Alias" className="mb-3">
-                                <Form.Control  type="text" required placeholder="Ingrese su alias" onBlur={(e) => { setAlias(e.target.value) }} />
-                                <Form.Control.Feedback type="invalid">Ingrese un alias.</Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formAvatar">
-                            <FloatingLabel label="URL Foto" className="mb-3">
-                                <Form.Control required type="url" placeholder="Ingrese la url de la foto" onBlur={(e) => { setAvatar(e.target.value) }} />
-                                <Form.Control.Feedback type="invalid">Ingrese URL de imagen valido.</Form.Control.Feedback>
-                            </FloatingLabel>
-                        </Form.Group>
                         <Form.Group className="mb-3" controlId="formMessage">
                             <FloatingLabel label="Mensaje" className="mb-3">
                                 <Form.Control required type="text" placeholder="Ingrese su mensaje" onBlur={(e) => { setMessage(e.target.value) }} />

@@ -7,11 +7,7 @@ const ChatFormContainer = ({socket, email}) => {
 
     const [show, setShow] = useState(false)
     const [validated, setValidated] = useState(false);
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [age, setAge] = useState(0)
-    const [alias, setAlias] = useState('')
-    const [avatar, setAvatar] = useState('')
+    //const [type, setType] = useState('')
     const [message, setMessage] = useState('')
 
     const handleClose = () => setShow(false)
@@ -27,11 +23,7 @@ const ChatFormContainer = ({socket, email}) => {
             let newMessage = {
                 author: {
                     id: email,
-                    name: name,
-                    surname: surname,
-                    age: Number(age),
-                    alias: alias,
-                    avata: avatar 
+                    type: 'usuario'
                 },
                 text: message,
                 date: (new Date()).toLocaleString()
@@ -48,11 +40,6 @@ const ChatFormContainer = ({socket, email}) => {
     let commonProps = {
         show: show,
         validated: validated,
-        setName: setName,
-        setSurname: setSurname,
-        setAge: setAge,
-        setAlias: setAlias,
-        setAvatar: setAvatar,
         setMessage: setMessage,
         handleShow: handleShow,
         handleClose: handleClose,
