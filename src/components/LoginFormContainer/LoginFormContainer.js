@@ -52,6 +52,7 @@ const LoginFormContainer = () => {
                         } else {
                             setValidated(true);
                             localStorage.setItem('currentUser', JSON.stringify(res.data))
+                            localStorage.setItem('coderJWT', res.jwt)
                             window.location.reload()
                         }
                     })

@@ -37,7 +37,12 @@ const ItemFormContainer = () => {
                 stock: Number(stock)
             }
 
-            let options = { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(prod)}
+            let options = { 
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('coderJWT')},
+                body: JSON.stringify(prod)
+            }
+
             await fetch(`${BACKEND_SERVER}/api/productos`, options)
             .then(res => res.json())
             .then(data => {

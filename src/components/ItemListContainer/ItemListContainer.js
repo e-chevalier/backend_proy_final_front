@@ -16,7 +16,11 @@ const ItemListContainer = ({ greeting }) => {
 
     const deleteProd = async (prod) => {
         let text = `Se va a eliminar el producto ${prod.title}`
-        let options = { method: 'DELETE' }
+
+        let options = { 
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('coderJWT')}
+        }
         
         if (window.confirm(text) === true) {
             await fetch(`${BACKEND_SERVER}/api/productos/${prod.id}`, options)

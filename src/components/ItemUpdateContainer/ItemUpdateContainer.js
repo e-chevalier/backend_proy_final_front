@@ -46,7 +46,12 @@ const ItemUpdateContainer = () => {
             }
 
             let text = `Se va a modificar el producto ${products[0].title}`
-            let options = { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(prod)}
+        
+            let options = { 
+                method: 'PUT', 
+                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('coderJWT')},
+                body: JSON.stringify(prod)
+            }
         
             if (window.confirm(text) === true) {
                 await fetch(`${BACKEND_SERVER}/api/productos/${prodId}`, options)

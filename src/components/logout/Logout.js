@@ -20,6 +20,7 @@ const Logout = () => {
                 .then(data => {
                     console.log(data);
                     localStorage.removeItem('currentUser')
+                    localStorage.removeItem('coderJWT')
                 })
 
             window.location.reload()
