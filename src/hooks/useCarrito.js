@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
 import getCarrito from '../services/GetFetch/getCarrito';
 
-const useCarrito = (id = 0) => {
+const useCarrito = () => {
+
+    let localCartId = Number(localStorage.getItem('localCartId')) || 0
 
     const [products, setProducts] = useState([]);
     const [cartId, setCartId] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getCarrito(id)
+        getCarrito(localCartId)
             .then(res => {
                 setProducts(res.products)
                 setCartId(res.id)
+                localStorage.setItem('localCartId', res.id)
             })
             .catch(err => console.log(err))
             .finally(() => {
@@ -21,7 +24,7 @@ const useCarrito = (id = 0) => {
         return () => {
             setLoading(true);
         }
-    }, [id]);
+    }, [localCartId]);
 
     return [products, loading, cartId, setCartId]
 }

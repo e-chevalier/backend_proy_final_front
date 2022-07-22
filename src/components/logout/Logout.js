@@ -1,10 +1,14 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { config } from '../../config/config.js';
+import { useCartContext } from '../../context/CartContext';
+
 
 const BACKEND_SERVER = config.BACKEND_SERVER
 
 const Logout = () => {
+
+    const { clear, setUser } = useCartContext()
 
     const handleLogout = async (event) => {
 
@@ -19,8 +23,11 @@ const Logout = () => {
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
+                    setUser(null)
+                    clear()  
                     localStorage.removeItem('currentUser')
                     localStorage.removeItem('coderJWT')
+                    localStorage.removeItem('localCartId')
                 })
 
             window.location.reload()

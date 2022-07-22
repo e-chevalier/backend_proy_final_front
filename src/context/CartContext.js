@@ -18,14 +18,14 @@ export const useCartContext = () => {
  */
 
 const CartContextProvider = ({ children }) => {
-
-    const [products, loading, cartId, setCartid] = useCarrito();
+    
+    const [products, loading, cartId, setCartid] = useCarrito()
     const [cartList, setCartList] = useState([])
     const [cartCounter, setCartCounter] = useState(0)
     const [subTotal, setSubTotal] = useState(0)
     const [shippingCost, setShippingCost] = useState(500)
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('currentUser')) || null)
 
 
 
@@ -61,6 +61,19 @@ const CartContextProvider = ({ children }) => {
     //     }
     // }
 
+    const putOwnerCart = async (email) => {
+        try {
+            let options = { method: 'PUT', headers: { 'Content-Type': 'application/json' } }
+            await fetch(`${BACKEND_SERVER}/api/carrito/${cartId}/${email}`, options)
+                .then(res => res.json())
+                .then(data => {
+                    //console.log(data);
+                })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     /**
     *  Function to determine if an item is in the cart 
     * @param {*} itemId 
@@ -85,11 +98,11 @@ const CartContextProvider = ({ children }) => {
             setCartList([...cartList, item])
         }
 
-        let options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id_prod: item.id }) }
+        let options = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id_prod: item.id, qty: qty }) }
         fetch(`${BACKEND_SERVER}/api/carrito/${cartId}/productos`, options)
             .then(res => res.json())
             .then(data => {
-                console.log(data); // JSON data parsed by `data.json()` call
+                //console.log(data); // JSON data parsed by `data.json()` call
             })
 
         setCartCounter(cartCounter + qty)
@@ -111,7 +124,7 @@ const CartContextProvider = ({ children }) => {
         fetch(`${BACKEND_SERVER}/api/carrito/${cartId}/productos/${itemId}`, options)
             .then(res => res.json())
             .then(data => {
-                console.log(data); // JSON data parsed by `data.json()` call
+                //console.log(data); // JSON data parsed by `data.json()` call
             })
     }
 
@@ -125,7 +138,6 @@ const CartContextProvider = ({ children }) => {
         try {
 
             // TODO: Iterate over cartList and restore the stock.
-            console.log("Call clear()")
             setCartCounter(0)
             setCartList([])
 
@@ -133,18 +145,26 @@ const CartContextProvider = ({ children }) => {
             await fetch(`${BACKEND_SERVER}/api/carrito/${cartId}`, options)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data); // JSON data parsed by `data.json()` call
+                    //console.log(data);
                 })
 
-            let newCart_id = await (fetch(`${BACKEND_SERVER}/api/carrito/`, { method: 'POST' })
+            let newCart_id = await fetch(`${BACKEND_SERVER}/api/carrito/`, { method: 'POST' })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    //console.log(data)
                     return data.id
-                }))
+                })
+
             setCartid(newCart_id)
             setCartList([])
-
+            localStorage.setItem('localCartId', newCart_id)
+            if ( user?.email ) {
+                setTimeout(() => {
+                    putOwnerCart(user.email)
+                }, 500);
+                
+            }            
+            
         } catch (error) {
             console.log(error)
         }
@@ -186,7 +206,7 @@ const CartContextProvider = ({ children }) => {
             fetch(`${BACKEND_SERVER}/api/carrito/${cartId}/confirmorder`, options)
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    //console.log(data)
                     alert("Gracias por su pedido.")
                 })
 
@@ -199,7 +219,7 @@ const CartContextProvider = ({ children }) => {
 
 
     return (
-        <CartContext.Provider value={{ cartList, cartCounter, subTotal, shippingCost, setShippingCost, addItem, removeItem, clear, user, setUser, confirmOrder }}>
+        <CartContext.Provider value={{ cartList, cartCounter, subTotal, shippingCost, setShippingCost, addItem, removeItem, clear, user, setUser, confirmOrder, putOwnerCart }}>
             {children}
         </CartContext.Provider>
     )

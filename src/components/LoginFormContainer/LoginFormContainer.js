@@ -8,7 +8,7 @@ const BACKEND_SERVER = config.BACKEND_SERVER
 
 const LoginFormContainer = () => {
 
-    const { setUser } = useCartContext()
+    const { setUser, putOwnerCart } = useCartContext()
     const [show, setShow] = useState(false)
     const [validated, setValidated] = useState(false);
     const [email, setEmail] = useState('')
@@ -44,14 +44,15 @@ const LoginFormContainer = () => {
                     .then(res => res.json())
                     .then(res => { // JSON data parsed by `data.json()` call
                         console.log(res)
-                        setUser(res.data || null)
                         //alert("Login Status: " + res.status)
                         if( res.status === "NOTLOGGEDIN" ) {
                             setValidated(false);
                             alert("Usuario o password incorrecto")
                         } else {
                             setValidated(true);
+                            setUser(res.data)
                             localStorage.setItem('currentUser', JSON.stringify(res.data))
+                            putOwnerCart(res.data.email)
                             localStorage.setItem('coderJWT', res.jwt)
                             window.location.reload()
                         }
