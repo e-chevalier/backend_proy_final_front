@@ -207,7 +207,7 @@ const CartContextProvider = ({ children }) => {
                 .then(res => res.json())
                 .then(data => {
                     //console.log(data)
-                    alert("Gracias por su pedido.")
+                    alert("Gracias por su compra.\n En breve le llegara un email con la orden de compra.")
                 })
 
         } catch (error) {

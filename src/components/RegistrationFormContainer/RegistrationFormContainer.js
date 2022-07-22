@@ -48,7 +48,7 @@ const RegistrationFormContainer = () => {
             .then(res => res.json())
             .then(data => {
                 console.log(data); // JSON data parsed by `data.json()` call
-                alert("Usuario agregado ID:" + data.id )
+                alert("Usuario registrado.\nMuchas gracias.")
             })
 
             handleClose()
