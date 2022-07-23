@@ -5,6 +5,7 @@ import CartWidget from "../CartWidget/CartWidget";
 import Loading from "../Loading/Loading";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
+import Button from 'react-bootstrap/Button'
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import useFetch from '../../hooks/useFetch';
@@ -88,7 +89,10 @@ const NavigationBar = () => {
 
                   {
                     localStorage.getItem('currentUser') ?
-                      <Logout /> :
+                      <>
+                      <Button variant="outline-primary mx-4" as={Link} to={`/chat/${getUserData().email}`}> Ayuda </Button>
+                      <Logout /> 
+                      </>:
                       <>
                         <RegistrationFormContainer />
                         <LoginFormContainer />

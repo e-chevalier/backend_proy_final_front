@@ -2,6 +2,7 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { config } from '../../config/config.js';
 import { useCartContext } from '../../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 
 const BACKEND_SERVER = config.BACKEND_SERVER
@@ -9,6 +10,7 @@ const BACKEND_SERVER = config.BACKEND_SERVER
 const Logout = () => {
 
     const { clear, setUser } = useCartContext()
+    let navigate = useNavigate();
 
     const handleLogout = async (event) => {
 
@@ -29,8 +31,11 @@ const Logout = () => {
                     localStorage.removeItem('coderJWT')
                     localStorage.removeItem('localCartId')
                 })
-
-            window.location.reload()
+            //window.location.reload()
+            setTimeout(() => {
+                navigate('/')
+            }, 1000);
+           
 
         } catch (error) {
             console.log(error)
